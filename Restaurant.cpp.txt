@@ -1,0 +1,561 @@
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+#include <iostream>
+
+
+void viewHomepage();
+void viewMenu();
+void viewMenuCustomer();
+void changeDish();
+void changePrice();
+void changeStock();
+void removeDish();
+void addDish();
+void specialDeal();
+void checklist();
+void revenue();
+void order();
+void review();
+
+using namespace std;
+
+const int MENU_SIZE = 18;
+string DISHES[MENU_SIZE] = {"Daal Mash", "Daal Channa", "Curry Pakora", "Chicken Qorma", "Nihari", "Chai", "Lassi", "Aalu Palak", "Bhindi", "Aalu Qeema"};
+int PRICES[MENU_SIZE] = {120, 140, 140, 190, 160, 100, 110, 170, 150, 220};
+int STOCK[MENU_SIZE] = {11, 0, 14, 15, 25, 17, 38, 23, 12, 19};
+int balance = 7000;
+string ne,nd;
+
+string checkItems[10] = {"Curry Pakora", "Daal Channa", "Chicken Qorma", "Chai", "Bhindi"};
+int checkPrice[10] = {140, 140, 190, 100, 150};
+
+int c;
+int stock;
+
+string newDISHES[100];
+int newSTOCK[100];
+
+//Function for displaying homepage
+void viewHomepage() {
+  system("cls");
+  cout << "\t\t\t\t\t     RESTAURANT MANAGEMENT SYSTEM by \n";
+  cout << "\t\t\t\t\t\t           ZAIN\n\n";
+}
+
+// Function for displaying menu for staff
+void viewMenu() {
+  cout << "\t\t\t\t\t            Menu\n                         " << endl << endl;
+  cout << setw(4) << "ITEM NO." << setw(27) << "ITEMS" << setw(22) << "PRICES" << setw(22) << "STOCK" << endl;
+  int n = 0;
+  for (int i = 0; i < 10; i++) {
+         	if( PRICES[i]!= 0 || STOCK[i]!= 0) {
+           cout << setw(4) << i + 1 << "." << setw(30) << DISHES[i] << setw(20) << PRICES[i] << setw(22)<< STOCK[i] <<endl;
+           n++; 
+	}
+        else n--;
+  }
+}
+
+// Function for displaying menu for customers
+void viewMenuCustomer() {
+  cout << "\t\t\t\t          Menu For Customers\n" << endl << endl;
+  cout << setw(4) << "ITEM NO." << setw(27) << "ITEMS" << setw(22) << "PRICES" << endl;
+  for (int i = 0; i < 10; i++) {
+    cout << setw(4) << i + 1 << "." << setw(30) << DISHES[i] << setw(20)
+         << PRICES[i] << setw(22) << endl;
+  }
+}
+
+// Funtion to change the dish name/ its price/ its stock
+void changeDish() {
+  cout<<"Which Dish number you want to edit :"<<endl;
+					int no;
+					cin >> no;
+					cout << "Enter New dish name :";
+					cin >> nd;
+					DISHES[no-1]= nd;
+					cout << "Enter Stock of New dish:";
+					cin >> stock;
+					STOCK[no-1] = stock;
+					cout << "Is you want to change its price also or not."<<endl;
+					cout << "Press 1 for yes or 0 for No"<<endl;
+					int nu;
+					cin >> nu;
+					if(nu == 1){
+						cout << "Enter new price:";
+						int pri;
+						cin >> pri;
+						PRICES[no-1] = pri; 
+						}
+					else if(nu == 0);
+					else
+					cout << "Please enter Correct Number" << endl;
+}
+
+// Function for changing the price of dishes
+void changePrice() {
+  int itemNo;
+  cout << "Enter the dish number to change its price: ";
+  cin >> itemNo;
+  int newPri;
+  cout << "Enter the new price of " << itemNo << "no. dish: ";
+  cin >> newPri;
+  PRICES[itemNo - 1] = newPri;
+}
+
+// Function for changing Stock of dishes
+void changeStock() {
+  int num;
+  cout << "Enter the dish number to change its stock: ";
+  cin >> num;
+  int stock;
+  cout << "Enter the new stock ";
+  cin >> stock;
+  STOCK[num - 1] = stock;
+}
+
+// Function for removing any dish
+void removeDish() {
+  int dishNum;
+  cout << "Enter the dish number you want to remove: ";
+  cin >> dishNum;
+  int empty = 0;
+  DISHES[dishNum - 1] = empty;
+  PRICES[dishNum - 1] = empty;
+  STOCK[dishNum - 1] = empty;
+}
+
+// Function for adding any dish
+void addDish() {
+  string newDish;
+  cout << "Enter the dish name you want to add: ";
+  cin >> newDish;
+  int newPrice;
+  cout << "Enter the price of " << newDish << ": ";
+  cin >> newPrice;
+  int newStock;
+  cout << "Enter the stock of " << newDish << ": ";
+  cin >> newStock;
+
+  DISHES[11] = newDish;
+  PRICES[11] = newPrice;
+  STOCK[11] = newStock;
+}
+
+// Function for adding special deal dishes
+void specialDeal() {
+  int num;
+  cout << "Enter the number of items you want in your Special Deal: ";
+  cin >> num;
+
+  cout << "Enter the names of items: ";
+  for (int i = 0; i < num; i++) {
+    cin >> newDISHES[i];
+  }
+  int newPRI[100];
+  cout << "Enter the prices of items you entered: ";
+  for (int i = 0; i < num; i++) {
+  	cin >> newPRI[i];
+  }
+    cout << "Enter the stock of items you entered: ";
+  for (int j = 0; j < num; j++) {
+    cin >> newSTOCK[j];
+  }
+  cout << "\t\t\t\t\t       Your list of Special Deals:\n\n" << endl;
+  cout << setw(4) << "ITEM NO." << setw(24) << "DISHES" << setw(23) << "STOCK" << endl;
+       
+  for (int i = 0; i < num; i++) {
+    cout << setw(4) << i + 1 << "." << setw(26) << newDISHES[i] << setw(24)
+         << newSTOCK[i] << endl;
+  }
+ int totalPrice = 0;
+  for (int i = 0; i < num; i++) {
+    totalPrice += newPRI[i];
+  }
+  cout << "total price of items: " << totalPrice << endl;
+}
+
+// function for checking tbe list 
+void checklist() {
+  for (int i = 0,x=0; i < 1000; i++,x++) {
+    if (checkPrice[i] == 0) {
+      break;
+    }
+    cout << setw(4) << x << "-" << setw(30) << checkItems[i] << setw(10)
+         << checkPrice[i] << endl;
+    c++;
+  }
+}
+
+// Functio for displaying the revenue
+void revenue() {
+  int sum = 0;
+  for (int i = 0; i < 1000; i++) {
+    if (checkPrice[i] == 0) {
+      break;
+    }
+    sum = checkPrice[i] + sum;
+  }
+  cout << endl << endl << "Total Revenue is :" << sum << endl;
+}
+
+// Function for delaying the process of management
+void  wait() {
+    cout << "Your request is processing ..." << endl;
+
+#ifdef _WIN32
+    system("timeout /t 5 >nul");
+#else
+    system("sleep 5s");
+#endif
+    cout << " " <<endl;
+}
+
+// Fucntion for placing order by customers
+void order() {
+  viewMenuCustomer();
+  cout << "Enter the total number of items you want to order: ";
+  int order, z;
+  cin >> order;
+  string ord[order];
+  int price[order];
+  cout << "Enter the item number you want to order:\n ";
+  for (int i = 0; i < order; i++) {
+    cin >> z;      
+    ord[i] = DISHES[z - 1];
+    checkItems[c+i] = DISHES[z - 1];
+    PRICES[i] = PRICES[z - 1];
+    checkPrice[c+1] = PRICES[z - 1];
+    c++;
+    if (STOCK[z - 1] <= 0) {
+      cout << "This item is currently unavailable.Order something else:\n ";
+      i--;
+    } 
+	else
+    STOCK[z - 1] = STOCK[z - 1] - 1;
+}
+    cout << "Your cuurent balance is: " << balance << endl;
+    cout << endl << endl << "Your order is " << endl;
+    cout << setw(4) << "ITEM NO" << setw(30) << "DISHES" << setw(20) << "PRICES" << endl;
+    for (int i = 0; i < order; i++) {
+      cout << setw(4) << i + 1 << "." << setw(30) << ord[i] << setw(20)
+           << PRICES[i] << endl;
+    }
+  
+  int temp = 0;
+  for (int i = 0; i < order; i++) {
+    temp = PRICES[i] + temp;
+  }
+  cout << "Your  bill of items is :" << temp << endl;
+  cout << "Charges of delivery is :500" << endl;
+  temp = temp + 500;
+  cout << "Your total bill is :" << temp << endl;
+  cout << "Choose your method of paying the bill: " << endl
+       << "1. Online payment " << endl
+       << "2. Cash on Delivery" << endl;
+  int deli;
+  cin >> deli;
+  if (deli == 1) {
+    if (balance > temp) {
+      balance = balance - temp;
+      cout << "Your current Balance is :" << balance << endl;
+
+      int opt;
+      cout << "Do you want to find the location of your order? (1 for yes/ 0 "
+              "for no)\n";
+      cin >> opt;
+      if (opt == 1) {
+      	wait();
+        string addr[3] = {"2 hours late", "Delivered", "Ready to go"};
+        srand(time(0));
+        int random = rand() % 3;
+        switch (random) {
+          case 0:
+            cout << "your order is " << addr[0] << endl;
+            break;
+          case 1:
+            cout << "your order is " << addr[1] << endl;
+            break;
+          case 2:
+            cout << "your order is " << addr[2] << endl;
+            break;
+        }
+      } else
+        ;
+      cout << "Please gave review,Goodbye" << endl;
+    } else
+      cout << "You have unsufficent balance please try after increasing your "
+              "balance"
+           << endl;
+  } else if (deli == 2) {
+    cout << endl
+         << endl
+         << "Do you want to find location of your order" << endl;
+    int opt;
+    cout << "Do you want to find the location of your order? (1 for yes/ 0 for "
+            "no)\n";
+    cin >> opt;
+    if (opt == 1) {
+    	wait();
+      string addr[3] = {"2 hours late", "Delivered", "Ready to go"};
+      srand(time(0));
+      int random = rand() % 3;
+      switch (random) {
+        case 0:
+          cout << "your order is " << addr[0] << endl;
+          break;
+        case 1:
+          cout << "your order is " << addr[1] << endl;
+          break;
+        case 2:
+          cout << "your order is " << addr[2] << endl;
+          break;
+      }
+    }
+    cout << "Please give us your review and take care." << endl;
+  } else
+    cout << "Invalid entry" << endl;
+}
+
+void review(){
+	cout<<"Enter your name:";
+					string name;
+					cin >> name;
+					cout << "Enter your Gmail: ";
+					string mail;
+					cin >> mail;
+					cout << "Feedback: " << endl;
+					cin.ignore();
+					char feed[1000];
+					cin.getline(feed,1000);
+                     cout << "Thanks for your feedback,Take care.\n";
+}
+
+using namespace std;
+
+// Main code start
+int main() {
+  viewHomepage();
+  cout << endl << endl;
+  cout << "You are : (press 1 or 2) " << endl
+       << "1. Staff Member" << endl
+       << "2. Customer" << endl;
+  int num;
+  cin >> num;
+  int password;
+  switch (num) {
+    case 1:
+      cout << "\t\t\t\t                  Welcome Staff member\n\n " << endl;
+      cout << "Enter your password " << endl;
+      cout << "Password: ";
+      cin >> password;
+      if (password == 12345) {
+        do {
+          cout << " " << endl;
+          cout << "1. View Menu" << endl
+               << "2. Change dish" << endl
+               << "3. Dish priece" << endl
+               << "4. Change stock" << endl
+               << "5. Remove any Dish" << endl
+               << "6. Add dish" << endl
+               << "7. Add a deal for today" << endl
+               << "8. Check Orders List" << endl;
+          int choice;
+          cout << "Enter the option in order to proceed:\n ";
+          cin >> choice;
+          switch (choice) {
+            case 1:
+              viewMenu();
+              break;
+            case 2:
+              changeDish();
+              cout << "Now you want to view your menu again" << endl;
+              cout << "1. Yes" << endl;
+              cout << "2. No" << endl;
+              int no;
+              cin >> no;
+              if (no == 1)
+                viewMenu();
+              else;
+              break;
+            case 3:
+              changePrice();
+              cout << "Now you want to view your menu again" << endl
+                   << "1. Yes" << endl
+                   << "2. No" << endl;
+              int nu;
+              cin >> nu;
+              if (nu == 1)
+                viewMenu();
+              else
+                ;
+              break;
+            case 4:
+              changeStock();
+              cout << "Now you want to view your menu again" << endl
+                   << "1. Yes" << endl
+                   << "2. NO" << endl;
+              int na;
+              cin >> na;
+              if (na == 1)
+                viewMenu();
+              else
+                ;
+              break;
+            case 5:
+              removeDish();
+              cout << "Now you want to view your menu again" << endl
+                   << "1. Yes" << endl
+                   << "2. NO" << endl;
+              int nb;
+              cin >> nb;
+              if (nb == 1)
+                viewMenu();
+              else
+                ;
+              break;
+            case 6:
+              addDish();
+              cout << "Now you want to view your menu again" << endl
+                   << "1. Yes" << endl
+                   << "2. NO" << endl;
+              int nc;
+              cin >> nc;
+              if (nc == 1) {
+                cout << setw(4) << "ITEM NO." << setw(30) << "DISHES" << setw(20)
+                     << "PRICES" << setw(10) << "STOCK" << endl;
+                for (int i = 0,z=0; i <= 30; i++,z++) {
+                	if(PRICES[i]!=0){
+					
+                  cout << setw(4) << z + 1 << "-" << setw(30) << DISHES[i]
+                       << setw(20) << PRICES[i] << setw(10) << STOCK[i] << endl;}
+                       else
+                       z--;
+                }
+              } else;
+              break;
+            case 7:
+              specialDeal();
+              cout << "Now you want to view your menu again" << endl
+                   << "1. Yes" << endl
+                   << "2. NO" << endl;
+              int nd;
+              cin >> nd;
+              if (nd == 1)
+                viewMenu();
+              else;
+              break;
+            case 8:
+            	cout << " " << endl << endl;
+                cout << "\t\t\t             Your Order list is\n\n " << endl;
+              checklist();
+              revenue();
+              break;
+            default:
+              cout << "You enterd a wrong number" << endl;
+              break;
+          }
+          int rpe;
+          cout << "Do you want to do somthing more? (1 for yes and 0 for no)"
+               << endl
+               << "1. Yes" << endl
+               << "0. No" << endl;
+          cin >> rpe;
+          if (rpe == 0) break;
+        } while (true);
+      } else
+        cout << "You entered the wrong password." << endl;
+      break;
+      
+      
+      
+      // customer
+	      case 2:
+      cout << "Welcome to our Restaurant" << endl;
+      cout << "Enter the option in order to proceed" << endl
+           << "1. Place order" << endl
+           << "2. Give review" << endl;
+      int review_var;
+      cin >> review_var;
+
+      if (review_var == 1) {
+        cout << "If you are new customer creat your account or if you are "
+                "regular customer please login" << endl;
+        cout << "press 1 for creating account or 2 for login" << endl;
+        int X;
+        cin >> X;
+        if (X == 1) {
+          cout << "Your name: ";
+          string name;
+          cin >> name;
+          cout << "Your Gmail: ";
+          string gmail;
+          cin >> gmail;
+          cout << "Create a password: ";
+          string pass;
+          cin >> pass;
+          cout << "Your CNIC: ";
+          int cnic;
+          cin >> cnic;
+          int pn;
+          cout << "Your Phone no: ";
+          cin >> pn;
+          cout << endl;
+          cout << "Your username is :" << gmail << endl
+               << "Your password is:" << pass << endl;
+          cout << "Now Login to your account" << endl;
+          cout << "User name:";
+          string username;
+          cin >> username;
+          cout << "password:";
+          string pas;
+          cin >> pas;
+          if (username == gmail && pass == pas) {
+            do {
+              order();
+              cout << "Do You want to order something more." << endl
+                   << "1. Yes" << endl
+                   << "0. No" << endl;
+              int x;
+              cin >> x;
+              if (x == 0) break;
+            } while (true);
+          } else
+            cout << "You enterd the wrong password or username" << endl;
+        } else if (X == 2) {
+          string name[7] = {"xyz@gmail.com", "abc@gmail.com","lorem@gmail.com"};
+          string pa[7] = {"123", "456", "789"};
+          cout << "User name:";
+          string username;
+          cin >> username;
+          cout << "Password:";
+          string passw;
+          cin >> passw;
+          for (int i = 0; i < 7; i++) {
+            if (name[i] == username && pa[i] == passw) {
+              do {
+                order();
+                cout << "Do You want to order something more." << endl
+                     << "1. Yes" << endl
+                     << "0. No" << endl;
+                int x;
+                cin >> x;
+                if (x == 0) break;
+              } while (true);
+            }
+          }
+      }
+           else cout << "You entered wrong number" << endl;
+   }       
+   else if (review_var == 2) {
+        review();
+        } else
+          cout << "Enter the correct number" << endl;
+        break;
+        default:
+          cout << "You entered wrong number" << endl;
+      }
+      return 0;
+  }
+
